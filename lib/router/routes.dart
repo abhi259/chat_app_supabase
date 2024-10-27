@@ -1,4 +1,5 @@
 import 'package:chat_app_supabase/features/auth/views/auth_screen.dart';
+import 'package:chat_app_supabase/features/auth/views/create_user.dart';
 import 'package:chat_app_supabase/features/dashboard/view/dashboard.dart';
 import 'package:chat_app_supabase/features/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,21 @@ final GoRouter mainRouter = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             return const AuthScreen();
           },
+          routes: [
+            GoRoute(
+              path: '/create-user',
+              builder: (BuildContext context, GoRouterState state) {
+                // Extract parameters from state.extra
+                final Map<String, dynamic> params =
+                    state.extra as Map<String, dynamic>;
+                return CreateUser(
+                  phoneNumber: params['phoneNumber'] as String,
+                  name: params['name'] as String,
+                  email: params['email'] as String,
+                );
+              },
+            ),
+          ],
         ),
         GoRoute(
           path: '/dashboard',

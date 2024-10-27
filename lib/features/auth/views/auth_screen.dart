@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chat_app_supabase/core/supabase_services/supabase_client.dart';
+import 'package:chat_app_supabase/features/auth/widgets/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,23 +22,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
   final PageController _pageController = PageController(initialPage: 0);
   late AnimationController _animationController;
   late Animation<double> _animation;
-  final List<String> _pages = ['Sign Up', 'Login'];
-
-  void _goToPage(int page) {
-    setState(() {
-      isExistingUser = page == 1;
-    });
-    _pageController.animateToPage(
-      page,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOut,
-    );
-    if (isExistingUser) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-  }
 
   @override
   void initState() {
@@ -55,7 +39,24 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+  }
+
+  void _goToPage(int page) {
+    setState(() {
+      isExistingUser = page == 1;
+    });
+    _pageController.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeInOut,
+    );
+    if (isExistingUser) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
   }
 
   //TODO: check for user in database
@@ -123,69 +124,46 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                _animatedContainer(),
-                const SizedBox(height: 16.0),
-                // SizedBox(
-                //   height: 50,
-                //   child: PageView.builder(
-                //     controller: _pageController,
-                //     itemBuilder: (context, index) {
-                //       final adjustedIndex = index % _pages.length;
-                //       return Center(child: Text(_pages[adjustedIndex]));
-                //     },
-                //     onPageChanged: (index) {
-                //       final newIsExistingUser = index % 2 == 1;
-                //       if (newIsExistingUser != isExistingUser) {
-                //         setState(() {
-                //           isExistingUser = newIsExistingUser;
-                //         });
-                //         if (isExistingUser) {
-                //           _animationController.forward();
-                //         } else {
-                //           _animationController.reverse();
-                //         }
-                //       }
-                //     },
-                //   ),
-                // ),
-                SizedBox(
-                  height: 50,
-                  child: PageView(
-                      controller: _pageController,
-                      children: [
-                        Center(child: Text('Sign Up')),
-                        Center(child: Text('Login')),
-                      ],
-                      onPageChanged: (index) {
-                        setState(() => isExistingUser = index == 1);
-                        if (isExistingUser) {
-                          _animationController.forward();
-                        } else {
-                          _animationController.reverse();
-                        }
-                      }),
-                ),
-                TextField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
+          Column(
+            children: [
+              _animatedContainer(),
+              const SizedBox(height: 24.0),
+              SizedBox(
+                height: 400,
+                child: PageView(
+                  controller: _pageController,
+                  children: const [
+                    SignUpPage(),
+                    Center(
+                      child: Text('Login'),
                     ),
-                    labelText: 'Email ID',
-                    hintText: 'Enter your Email ID',
-                  ),
+                  ],
+                  onPageChanged: (index) {
+                    setState(() => isExistingUser = index == 1);
+                    if (isExistingUser) {
+                      _animationController.forward();
+                    } else {
+                      _animationController.reverse();
+                    }
+                  },
                 ),
-                ElevatedButton(
-                  onPressed: handleLogin,
-                  child: Text(isExistingUser ? "Login" : "Sign Up"),
-                )
-              ],
-            ),
+              ),
+              // TextField(
+              //   controller: _emailController,
+              //   keyboardType: TextInputType.emailAddress,
+              //   decoration: InputDecoration(
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(100),
+              //     ),
+              //     labelText: 'Email ID',
+              //     hintText: 'Enter your Email ID',
+              //   ),
+              // ),
+              // ElevatedButton(
+              //   onPressed: handleLogin,
+              //   child: Text(isExistingUser ? "Login" : "Sign Up"),
+              // )
+            ],
           ),
         ],
       ),
@@ -206,7 +184,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
           height: containerHeight,
           padding: const EdgeInsets.symmetric(horizontal: padding, vertical: 4),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceBright,
+            color: const Color.fromARGB(255, 19, 27, 29),
             borderRadius: BorderRadius.circular(containerHeight / 2),
           ),
           child: Stack(
@@ -217,7 +195,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
                   width: buttonWidth,
                   height: containerHeight - 8, // Adjust for vertical padding
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    color: const Color.fromARGB(255, 18, 52, 59),
                     borderRadius:
                         BorderRadius.circular((containerHeight - 8) / 2),
                   ),
