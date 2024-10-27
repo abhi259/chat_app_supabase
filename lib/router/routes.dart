@@ -1,5 +1,6 @@
-
-import 'package:chat_app_supabase/pages/home/view/home_screen.dart';
+import 'package:chat_app_supabase/features/auth/views/auth_screen.dart';
+import 'package:chat_app_supabase/features/dashboard/view/dashboard.dart';
+import 'package:chat_app_supabase/features/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,9 +9,22 @@ final GoRouter mainRouter = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return const HomeScreen();
+        return const OnboardingScreen();
       },
-     
+      routes: [
+        GoRoute(
+          path: '/auth-screen',
+          builder: (BuildContext context, GoRouterState state) {
+            return const AuthScreen();
+          },
+        ),
+        GoRoute(
+          path: '/dashboard',
+          builder: (BuildContext context, GoRouterState state) {
+            return const DashboardScreen();
+          },
+        ),
+      ],
     ),
   ],
 
